@@ -56,7 +56,11 @@ function retrieveMessage(id){
     var message;
     FB.api('/' + id, function (data) {
         if (data && !data.error) {
-            message = data.message ? data.message : data.story;
+            if (data.message === undefined){
+                message = data.story;
+            } else {
+                message = data.message;
+            }
             $('#my-posts').append("<p>" + message + "<br>@ " + data.created_time + "</p>");
         }
     })
