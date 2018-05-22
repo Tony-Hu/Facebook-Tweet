@@ -67,7 +67,7 @@
                     <div class="container">
                       <div class="row">
                         <div class="col-md-6">
-                          <button class="btn btn-primary" type="button" onclick="window.open('https://www.facebook.com/dialog/send?app_id=<%out.print(Constants.APP_ID);%>&link=https%3A//www.facebook.com/<% out.print(result.getKey().getName());%>&redirect_uri=<%out.print(Constants.REDIRECT_URL);%>')">Share</button>
+                          <button class="btn btn-primary" type="button" onclick="window.open('https://www.facebook.com/dialog/send?app_id=<%out.print(Constants.APP_ID);%>&link=<% out.print(Constants.REDIRECT_URL + "get?post_id=" + result.getKey().getName());%>&redirect_uri=<%out.print(Constants.REDIRECT_URL);%>')">Share</button>
                         </div>
                         <div class="col-md-6">
                           <button class="btn btn-primary" type="button" onclick="window.open('/delete?id=<%out.print(result.getKey().getName());%>')">Delete</button>
