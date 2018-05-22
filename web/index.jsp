@@ -51,7 +51,7 @@
   <section>
     <div class="jumbotron mt-2">
       <h4>
-        <a href="https://www.facebook.com/dialog/share?app_id=<%out.print(Constants.APP_ID);%>&display=popup&href=https%3A//www.google.com/&redirect_uri=<%out.print(Constants.REDIRECT_URL);%>/post">Post New Tweet</a>
+        <a href="https://www.facebook.com/dialog/share?app_id=<%out.print(Constants.APP_ID);%>&href=https%3A//www.google.com/&redirect_uri=<%out.print(Constants.REDIRECT_URL);%>post">Post New Tweet</a>
       </h4>
       <div id="my-posts" class="container">
         <% int i = 0;%>

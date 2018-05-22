@@ -33,7 +33,11 @@ import java.util.Date;
 import java.util.List;
 
 public class TweetFilter implements Filter {
+  //Token
   AccessToken token;
+  /**
+   * user
+   */
   User user;
   Connection<Post> posts;
   Connection<User> friends;
