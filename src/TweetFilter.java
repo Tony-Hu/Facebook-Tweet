@@ -76,6 +76,7 @@ public class TweetFilter implements Filter {
       request.setAttribute("name", user.getName());
       request.setAttribute("pic", user.getPicture().getUrl());
       request.setAttribute("posts", postsQuery);
+      request.setAttribute("ds", ds);
       if (friends != null) {
         request.setAttribute("friends", friendsPosts);
       }

@@ -1,4 +1,10 @@
-<%--
+<%@ page import="com.google.appengine.api.datastore.DatastoreService" %>
+<%@ page import="models.Constants" %>
+<%@ page import="com.google.appengine.api.datastore.PreparedQuery" %>
+<%@ page import="com.google.appengine.api.datastore.Query" %>
+<%@ page import="models.UserProperty" %>
+<%@ page import="com.google.appengine.api.datastore.Entity" %>
+<%@ page import="com.google.appengine.api.datastore.KeyFactory" %><%--
   Created by IntelliJ IDEA.
   User: tony
   Date: 5/15/18
@@ -6,6 +12,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
   <head>
     <title>Top tweets</title>
@@ -29,12 +36,40 @@
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <fb:login-button
-                scope="public_profile, email, user_birthday"
-                onlogin="checkLoginState();">
-        </fb:login-button>
+        <c:choose>
+          <c:when test="${token == null}">
+            <a href="${login}" class="text-dark">Login</a>
+          </c:when><c:otherwise>
+          <a class="text-dark" href="/logout">Hello! ${name}</a>
+        </c:otherwise>
+        </c:choose>
       </ul>
     </div>
   </nav>
+  <section>
+    <div class="jumbotron mt-2">
+      <div>
+        <% PreparedQuery pq = ((DatastoreService)request.getAttribute("ds")).prepare(new Query(Constants.POSTS).addSort(UserProperty.VISIT_COUNTER, Query.SortDirection.DESCENDING));%>
+        <% if (pq != null) { %>
+        <% int i = 0; %>
+
+        <% for (Entity posts : pq.asIterable()) { %>
+        <% i++;%>
+        <% Entity user = ((DatastoreService)request.getAttribute("ds")).get(KeyFactory.createKey(Constants.USERS, (String)posts.getProperty(UserProperty.UID)));%>
+        <div class="media">
+          <img class="mr-3" src="<% out.print(user.getProperty(UserProperty.USER_PIC_URL));%>"/>
+          <div class="media-body">
+            <h5><% out.print(user.getProperty(UserProperty.USER_NAME));%></h5>
+            <p><% out.println(i + ". "  + posts.getProperty(UserProperty.POST_MESSAGE) + "<br>@ " + posts.getProperty(UserProperty.POST_CREATED_TIME));%></p>
+            <p>Time viewed: <% out.print(posts.getProperty(UserProperty.VISIT_COUNTER));%></p>
+          </div>
+        </div>
+        <% } %>
+        <% } else { %>
+        <h5>Your friends didn't post anything.</h5>
+        <% } %>
+      </div>
+    </div>
+  </section>
   </body>
 </html>

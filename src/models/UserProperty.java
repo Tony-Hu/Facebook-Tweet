@@ -10,4 +10,5 @@ public class UserProperty {
   public static final String POST_MESSAGE = "post_message";
   public static final String POST_CREATED_TIME = "post_created_time";
   public static final String UID = "uid";
+  public static final String VISIT_COUNTER = "visit_counter";
 }

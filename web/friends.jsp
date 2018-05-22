@@ -5,7 +5,9 @@
 <%@ page import="com.google.appengine.api.datastore.PreparedQuery" %>
 <%@ page import="com.google.appengine.api.datastore.Entity" %>
 <%@ page import="models.Pair" %>
-<%@ page import="models.Constants" %><%--
+<%@ page import="models.Constants" %>
+<%@ page import="com.google.appengine.api.datastore.DatastoreService" %>
+<%@ page import="com.google.appengine.api.datastore.KeyFactory" %><%--
   Created by IntelliJ IDEA.
   User: tony
   Date: 5/15/18
@@ -57,15 +59,24 @@
               <% for (Entity posts : pair.pq.asIterable()) { %>
                 <% i++;%>
                 <div class="media">
-                  <img class="mr-3" src="<% out.print(pair.user.getPicture().getUrl());%>"/>
+                    <img class="mr-3" src="<% out.print(((DatastoreService)request.getAttribute("ds")).get(KeyFactory.createKey(Constants.USERS, pair.user.getId())).getProperty(UserProperty.USER_PIC_URL));%>"/>
                   <div class="media-body">
                     <h5><% out.print(pair.user.getName());%></h5>
                     <p><% out.println(i + ". "  + posts.getProperty(UserProperty.POST_MESSAGE) + "<br>@ " + posts.getProperty(UserProperty.POST_CREATED_TIME));%></p>
+                    <% Long counter = (Long)posts.getProperty(UserProperty.VISIT_COUNTER);%>
+                    <% if (counter == null) { %>
+                      <% posts.setIndexedProperty(UserProperty.VISIT_COUNTER, 1);%>
+                    <% } else { %>
+                      <% posts.setIndexedProperty(UserProperty.VISIT_COUNTER, counter + 1);%>
+                    <% } %>
+                    <% ((DatastoreService)request.getAttribute("ds")).put(posts);%>
                   </div>
                 </div>
               <% } %>
             <% } %>
-        <% } %>
+        <% } else { %>
+          <h5>Your friends didn't post anything.</h5>
+      <% } %>
       </div>
     </div>
   </section>
